@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 @Controller
 public class PublishController {
@@ -41,16 +40,7 @@ public class PublishController {
         model.addAttribute("description", description);
         model.addAttribute("tag", tag);
         User user = null;
-        Cookie[] cookies = request.getCookies();
-        for (Cookie cookie:cookies
-             ) {
-            if ("token".equals(cookie.getName())) {
-                String token = cookie.getValue();
-                user = userMapper.getUserByToken(token);
-                request.getSession().setAttribute("user", user);
-                break;
-            }
-        }
+        user = (User) request.getSession().getAttribute("user");
         if (user == null) {
             model.addAttribute("error", "请先登录");
             return "publish";

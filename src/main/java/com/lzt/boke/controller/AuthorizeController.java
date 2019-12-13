@@ -60,9 +60,16 @@ public class AuthorizeController {
             user.setName(githubUser.getName());
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(System.currentTimeMillis());
-            userMapper.insert(user);
+            user.setAccountId(String.valueOf(githubUser.getId()));
+            user.setAvatarUrl(githubUser.getAvatarUrl());
+            if (userMapper.getUserByAccountId(String.valueOf(githubUser.getId())) == null) {
+                userMapper.insert(user);
+            } else {
+                userMapper.update(user);
+            }
             session.setAttribute("user", user);
             Cookie cookie = new Cookie("token", user.getToken());
+            cookie.setMaxAge(60 * 60 * 24 * 30 * 6);
             response.addCookie(cookie);
             return "redirect:/";
         }
