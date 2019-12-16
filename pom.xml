@@ -83,7 +83,7 @@
     </dependencies>
     <build>
         <plugins>
-            <!--flywaydb-->
+            <!--flywaydb+H2-->
             <plugin>
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
@@ -93,6 +93,19 @@
                     <user>luo</user>
                     <password>123456</password>
                 </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.h2database</groupId>
+                        <artifactId>h2</artifactId>
+                        <version>1.4.199</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <!--generator+H2-->
+            <plugin>
+                <groupId>org.mybatis.generator</groupId>
+                <artifactId>mybatis-generator-maven-plugin</artifactId>
+                <version>1.4.0</version>
                 <dependencies>
                     <dependency>
                         <groupId>com.h2database</groupId>

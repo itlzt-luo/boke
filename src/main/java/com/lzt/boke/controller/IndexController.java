@@ -46,8 +46,8 @@ public class IndexController {
 
         if (pageNum == null || pageNum < 1) {
             pageNum = 1;
-        } else if (pageNum > questionService.getgetPages()) {
-            pageNum = questionService.getgetPages();
+        } else if (pageNum > questionService.getPages(pageSize)) {
+            pageNum = questionService.getPages(pageSize);
         }
 
         model.addAttribute("questionPageInfoDTO", questionService.setQuestionDTOListByPageHelper(pageNum, pageSize));

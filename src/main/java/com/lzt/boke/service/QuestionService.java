@@ -40,6 +40,9 @@ public class QuestionService {
             questionDTOList.add(questionDTO);
         }
 
+        pageInfo.setNavigateLastPage(this.getPages(pageSize));
+        pageInfo.setNavigateFirstPage(1);
+
         QuestionPageInfoDTO questionPageInfoDTO = new QuestionPageInfoDTO();
         questionPageInfoDTO.setPageInfo(pageInfo);
         questionPageInfoDTO.setQuestionDTOList(questionDTOList);
@@ -47,12 +50,10 @@ public class QuestionService {
         return questionPageInfoDTO;
     }
 
-    public Integer getgetPages() {
-        List<QuestionDTO> questionDTOList = new ArrayList<>();
-        PageHelper.startPage(1, 5);
-        List<Question> questions = questionMapper.list();
-        PageInfo<Question> pageInfo = new PageInfo<>(questions);
-        return pageInfo.getPages();
+    public Integer getPages(int pageSize) {
+        int totalRecords = questionMapper.count();
+        int totalPages = totalRecords % pageSize == 0 ? totalRecords / pageSize : (totalRecords / pageSize + 1);
+        return totalPages;
     }
    /* public List<QuestionDTO> setQuestionDTOList() {
         List<QuestionDTO> questionDTOList = new ArrayList<>();
