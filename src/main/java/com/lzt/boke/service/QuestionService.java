@@ -5,6 +5,8 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lzt.boke.dto.QuestionDTO;
 import com.lzt.boke.dto.QuestionPageInfoDTO;
+import com.lzt.boke.exception.CustomizeErrorCode;
+import com.lzt.boke.exception.CustomizeException;
 import com.lzt.boke.mapper.QuestionExtMapper;
 import com.lzt.boke.mapper.QuestionMapper;
 import com.lzt.boke.mapper.UserMapper;
@@ -133,7 +135,7 @@ public class QuestionService {
         Question question = questionMapper.selectByPrimaryKey(questionId);
 
         if (question == null) {
-            return null;
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
         }
         User user = userService.getUserById(question.getCreator().longValue());
 
