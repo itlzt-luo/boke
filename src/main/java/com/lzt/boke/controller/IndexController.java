@@ -7,6 +7,7 @@ import com.lzt.boke.mapper.UserMapper;
 import com.lzt.boke.model.Question;
 import com.lzt.boke.model.User;
 import com.lzt.boke.service.QuestionService;
+import com.lzt.boke.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,15 +21,15 @@ import java.util.List;
 
 @Controller
 public class IndexController {
-    final int pageSize = 5;
+    final Integer pageSize = 5;
 
     @Autowired
-    private UserMapper userMapper;
+    private UserService userService;
 
     @Autowired
     private QuestionService questionService;
     @GetMapping(value = "/")
-    public String hello(@RequestParam(name = "pageNum", required=false) Integer pageNum,
+    public String hello(@RequestParam(name = "pageNum",defaultValue = "1") Integer pageNum,
                         HttpServletRequest request,
                         Model model) {
         User user = null;
@@ -37,20 +38,13 @@ public class IndexController {
             for (Cookie cookie:cookies) {
                 if ("token".equals(cookie.getName())) {
                     String token = cookie.getValue();
-                    user = userMapper.getUserByToken(token);
+                    user = userService.getUserByToken(token);
                     request.getSession().setAttribute("user", user);
                     break;
                 }
             }
         }
-
-        if (pageNum == null || pageNum < 1) {
-            pageNum = 1;
-        } else if (pageNum > questionService.getPages(pageSize)) {
-            pageNum = questionService.getPages(pageSize);
-        }
-
-        model.addAttribute("questionPageInfoDTO", questionService.setQuestionDTOListByPageHelper(pageNum, pageSize));
+        model.addAttribute("questionPageInfoDTO", questionService.list(pageNum, pageSize));
         return "index";
     }
 }

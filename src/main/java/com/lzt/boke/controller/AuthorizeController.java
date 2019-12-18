@@ -1,11 +1,12 @@
 package com.lzt.boke.controller;
 
+
+
 import com.lzt.boke.dto.AccessTokenDTO;
 import com.lzt.boke.dto.GithubUser;
-import com.lzt.boke.mapper.UserMapper;
 import com.lzt.boke.model.User;
 import com.lzt.boke.provider.GithubProvider;
-import org.apache.ibatis.annotations.Mapper;
+import com.lzt.boke.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -37,7 +38,7 @@ public class AuthorizeController {
     private String redirectUri;
 
     @Autowired
-    private UserMapper userMapper;
+    private UserService userService;
 
     @GetMapping("/callback")
     public String callback(@RequestParam(name = "code") String code,
@@ -62,11 +63,7 @@ public class AuthorizeController {
             user.setGmtModified(System.currentTimeMillis());
             user.setAccountId(String.valueOf(githubUser.getId()));
             user.setAvatarUrl(githubUser.getAvatarUrl());
-            if (userMapper.getUserByAccountId(String.valueOf(githubUser.getId())) == null) {
-                userMapper.insert(user);
-            } else {
-                userMapper.update(user);
-            }
+            userService.createOrUpdate(user);
             session.setAttribute("user", user);
             Cookie cookie = new Cookie("token", user.getToken());
             cookie.setMaxAge(60 * 60 * 24 * 30 * 6);
@@ -76,5 +73,14 @@ public class AuthorizeController {
         return "redirect:/";
     }
 
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request,
+                         HttpServletResponse response) {
+        request.getSession().removeAttribute("user");
+        Cookie cookie = new Cookie("token", null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+        return "redirect:/";
+    }
 
 }

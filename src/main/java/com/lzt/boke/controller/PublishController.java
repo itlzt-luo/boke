@@ -6,6 +6,7 @@ import com.lzt.boke.mapper.QuestionMapper;
 import com.lzt.boke.mapper.UserMapper;
 import com.lzt.boke.model.Question;
 import com.lzt.boke.model.User;
+import com.lzt.boke.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,10 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 public class PublishController {
 
     @Autowired
-    UserMapper userMapper;
-
-    @Autowired
-    QuestionMapper questionMapper;
+    private QuestionService questionService;
 
     @GetMapping("/publish")
     public String publish() {
@@ -59,14 +57,14 @@ public class PublishController {
         }
 
         Question question = new Question();
-        question.setCreator(user.getId());
+        question.setCreator(user.getId().intValue());
         question.setDescription(description);
         question.setGmtCreate(System.currentTimeMillis());
         question.setGmtModified(System.currentTimeMillis());
         question.setTitle(title);
         question.setTag(tag);
 
-        questionMapper.insert(question);
-        return "index";
+        questionService.insert(question);
+        return "redirect:/";
     }
 }
