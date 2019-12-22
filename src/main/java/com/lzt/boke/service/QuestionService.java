@@ -3,13 +3,12 @@ package com.lzt.boke.service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.lzt.boke.dto.PageInfoDTO;
 import com.lzt.boke.dto.QuestionDTO;
-import com.lzt.boke.dto.QuestionPageInfoDTO;
 import com.lzt.boke.exception.CustomizeErrorCode;
 import com.lzt.boke.exception.CustomizeException;
 import com.lzt.boke.mapper.QuestionExtMapper;
 import com.lzt.boke.mapper.QuestionMapper;
-import com.lzt.boke.mapper.UserMapper;
 import com.lzt.boke.model.Question;
 import com.lzt.boke.model.QuestionExample;
 import com.lzt.boke.model.User;
@@ -19,7 +18,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 @Service
 public class QuestionService {
@@ -30,13 +28,16 @@ public class QuestionService {
     @Autowired
     private QuestionMapper questionMapper;
 
+    @Autowired
+    private QuestionExtMapper questionExtMapper;
+
     /**
      *
      * @param pageNum
      * @param pageSize
      * @return
      */
-    public QuestionPageInfoDTO list(Integer pageNum, Integer pageSize) {
+    public PageInfoDTO<QuestionDTO> list(Integer pageNum, Integer pageSize) {
 
         if (pageNum == null || pageNum < 1) {
             pageNum = 1;
@@ -59,9 +60,10 @@ public class QuestionService {
         pageInfo.setNavigateLastPage(this.getPages(pageSize, new QuestionExample()));
         pageInfo.setNavigateFirstPage(1);
 
-        QuestionPageInfoDTO questionPageInfoDTO = new QuestionPageInfoDTO();
+
+        PageInfoDTO<QuestionDTO> questionPageInfoDTO = new PageInfoDTO<>();
         questionPageInfoDTO.setPageInfo(pageInfo);
-        questionPageInfoDTO.setQuestionDTOList(questionDTOList);
+        questionPageInfoDTO.setDataCollection(questionDTOList);
 
         return questionPageInfoDTO;
     }
@@ -73,34 +75,26 @@ public class QuestionService {
      * @param pageSize
      * @return
      */
-    public QuestionPageInfoDTO list(Long id, Integer pageNum, Integer pageSize) {
+    public PageInfoDTO<Question> list(Long id, Integer pageNum, Integer pageSize) {
         QuestionExample questionExample = new QuestionExample();
         questionExample.createCriteria()
-                .andCreatorEqualTo(id.intValue());
+                .andCreatorEqualTo(id);
         if (pageNum == null || pageNum < 1) {
             pageNum = 1;
         } else if (pageNum > this.getPages(pageSize,questionExample)) {
             pageNum = this.getPages(pageSize, questionExample);
         }
 
-        List<QuestionDTO> questionDTOList = new ArrayList<>();
         PageHelper.startPage(pageNum, pageSize);
         List<Question> questions = questionMapper.selectByExample(questionExample);
         PageInfo<Question> pageInfo = new PageInfo<>(questions, 7);
-        for (Question question : questions) {
-            User user = userService.getUserById(question.getCreator().longValue());
-            QuestionDTO questionDTO = new QuestionDTO();
-            BeanUtils.copyProperties(question, questionDTO);
-            questionDTO.setUser(user);
-            questionDTOList.add(questionDTO);
-        }
 
         pageInfo.setNavigateLastPage(this.getPages(pageSize, questionExample));
         pageInfo.setNavigateFirstPage(1);
 
-        QuestionPageInfoDTO questionPageInfoDTO = new QuestionPageInfoDTO();
+        PageInfoDTO<Question> questionPageInfoDTO = new PageInfoDTO<>();
         questionPageInfoDTO.setPageInfo(pageInfo);
-        questionPageInfoDTO.setQuestionDTOList(questionDTOList);
+        questionPageInfoDTO.setDataCollection(questions);
 
         return questionPageInfoDTO;
     }
@@ -146,5 +140,11 @@ public class QuestionService {
         return questionDTO;
     }
 
+    public void incView(Long id) {
+        Question question = new Question();
+        question.setId(id);
+        question.setViewCount(1);
+        questionExtMapper.incView(question);
+    }
 
 }

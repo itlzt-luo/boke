@@ -1,6 +1,8 @@
 package com.lzt.boke.controller;
 
+import com.lzt.boke.dto.PageInfoDTO;
 import com.lzt.boke.dto.QuestionPageInfoDTO;
+import com.lzt.boke.model.Question;
 import com.lzt.boke.model.User;
 import com.lzt.boke.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,14 +33,10 @@ public class ProfileController {
         if ("questions".equals(action)) {
             model.addAttribute("section", "questions");
             model.addAttribute("sectionName", "我的提问");
-            QuestionPageInfoDTO questionPageInfoDTO = questionService.list(user.getId(), pageNum, pageSize);
+            PageInfoDTO<Question> questionPageInfoDTO = questionService.list(user.getId(), pageNum, pageSize);
             model.addAttribute("questionPageInfoDTO", questionPageInfoDTO);
-            return "profile";
-        } else {
-            return "redirect:/";
         }
 
-
-
+        return "profile";
     }
 }

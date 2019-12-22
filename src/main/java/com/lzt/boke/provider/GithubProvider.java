@@ -51,7 +51,7 @@ public class GithubProvider {
             GithubUser githubUser = JSON.parseObject(string, GithubUser.class);
             return githubUser;
         } catch (Exception e) {
-           // log.error("getUser error,{}", accessToken, e);
+            //log.error("getUser error,{}", accessToken, e);
         }
         return null;
     }
