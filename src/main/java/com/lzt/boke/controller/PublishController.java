@@ -2,8 +2,6 @@ package com.lzt.boke.controller;
 
 
 
-import com.lzt.boke.mapper.QuestionMapper;
-import com.lzt.boke.mapper.UserMapper;
 import com.lzt.boke.model.Question;
 import com.lzt.boke.model.User;
 import com.lzt.boke.service.QuestionService;
