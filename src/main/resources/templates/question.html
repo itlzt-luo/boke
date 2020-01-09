@@ -16,36 +16,41 @@
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <h4 class="question-title"><span th:text="${question.title}"></span></h4>
                 <span class="text-desc">
-                作者：<span th:text="${question.user.name}"></span> |
-                发布时间：<span th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd HH:mm')}"></span> |
-                阅读数： <span th:text="${question.viewCount}"></span>
-            </span>
+                    作者：<span th:text="${question.user.name}"></span> |
+                    发布时间：<span th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd HH:mm')}"></span> |
+                    阅读数： <span th:text="${question.viewCount}"></span>
+                </span>
                 <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 top-header"
+              <!--  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 top-header"
                      th:if="${!#lists.isEmpty(#httpServletRequest.getServletContext().getAttribute('HEADER'))}"
                      th:each="ad : ${#httpServletRequest.getServletContext().getAttribute('HEADER')}">
                     <a th:href="${ad.url}" th:text="${ad.title}" target="_blank"
                        style="color: #A00;font-weight: bold;"></a>
                     <img src="/images/hot.png"/>
-                </div>
+                </div>-->
 
                 <!--内容-->
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="question-view">
-                    <textarea style="display:none;" th:text="${question.description}"></textarea>
+<!--                    <textarea class="col-lg-9 col-md-12 col-sm-12 col-xs-12" readonly th:text="${question.description}"></textarea>-->
+                    <div th:text="${question.description}"></div>
                 </div>
-                <script type="text/javascript">
+
+
+
+
+               <!-- <script type="text/javascript">
                     $(function () {
                         editormd.markdownToHTML("question-view", {});
                     });
-                </script>
+                </script>-->
 
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"
+              <!--  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"
                      th:if="${!#lists.isEmpty(#httpServletRequest.getServletContext().getAttribute('FOOTER'))}"
                      th:each="ad : ${#httpServletRequest.getServletContext().getAttribute('FOOTER')}">
                     <a th:href="${ad.url}" th:text="${ad.title}" target="_blank"
                        style="color: #A00;font-weight: bold;"></a>
-                </div>
+                </div>-->
             <!--    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="width: 100%;"
                      th:if="${#lists.isEmpty(#httpServletRequest.getServletContext().getAttribute('FOOTER'))}">
                     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
@@ -81,8 +86,8 @@
                 <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             </div>
 
-            <!--回复-->
-<!--            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <!--回复展示-->
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <h4>
                     <span th:text="${question.commentCount}"></span> 个回复
                 </h4>
@@ -110,7 +115,7 @@
                                 <span class="pull-right"
                                       th:text="${#dates.format(comment.gmtCreate,'yyyy-MM-dd')}"></span>
                             </div>
-                            &lt;!&ndash;二级评论&ndash;&gt;
+                            <!--二级评论-->
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 collapse sub-comments"
                                  th:id="${'comment-'+comment.id}">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -124,10 +129,10 @@
                         </div>
                     </div>
                 </div>
-            </div>-->
+            </div>
 
             <!--回复输入框-->
-   <!--         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <h4>
                     提交回复
                 </h4>
@@ -148,9 +153,9 @@
                     </div>
                     <input type="hidden" id="question_id" th:value="${question.id}">
                     <textarea class="form-control comment" rows="6" id="comment_content"></textarea>
-                    <button type="button" class="btn btn-success btn-comment" onclick="post()">回复</button>
+                    <button id="commentButton" type="button" class="btn btn-success btn-comment" onclick="post()">回复</button>
                 </div>
-            </div>-->
+            </div>
 
         </div>
 
