@@ -26,7 +26,7 @@
     COMMENT_COUNT = COMMENT_COUNT + #{commentCount,jdbcType=INTEGER}
     where id = #{id}
     </update>
-
+<!--以正则的方式-->
     <select id="selectRelated" parameterType="com.lzt.boke.model.Question" resultMap="BaseResultMap">
         select * from QUESTION
         <where>

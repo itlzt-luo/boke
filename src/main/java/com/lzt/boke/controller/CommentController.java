@@ -37,7 +37,7 @@ public class CommentController {
             return ResultDTO.errorOf(CustomizeErrorCode.NO_LOGIN);
         }
 
-        if (commentCreateDTO == null || StringUtils.isBlank(commentCreateDTO.getContent())) {
+               if (commentCreateDTO == null || StringUtils.isBlank(commentCreateDTO.getContent())) {
             return ResultDTO.errorOf(CustomizeErrorCode.CONTENT_IS_EMPTY);
         }
 
@@ -57,6 +57,6 @@ public class CommentController {
     @RequestMapping(value = "/comment/{id}", method = RequestMethod.GET)
     public ResultDTO<List<CommentDTO>> comments(@PathVariable(name = "id") Long id) {
         List<CommentDTO> commentDTOS = commentService.listByTargetId(id, CommentTypeEnum.COMMENT);
-        return ResultDTO.okOf();
+        return ResultDTO.okOf(commentDTOS);
     }
 }
