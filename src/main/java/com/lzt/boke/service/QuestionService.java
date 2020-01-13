@@ -12,12 +12,15 @@ import com.lzt.boke.mapper.QuestionMapper;
 import com.lzt.boke.model.Question;
 import com.lzt.boke.model.QuestionExample;
 import com.lzt.boke.model.User;
+import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class QuestionService {
@@ -47,7 +50,10 @@ public class QuestionService {
 
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         PageHelper.startPage(pageNum, pageSize);
-        List<Question> questions = questionMapper.selectByExample(new QuestionExample());
+        QuestionExample questionExample = new QuestionExample();
+        questionExample.setOrderByClause("gmt_create desc");
+        List<Question> questions = questionMapper.selectByExample(questionExample);
+
         PageInfo<Question> pageInfo = new PageInfo<>(questions, 7);
         for (Question question : questions) {
             User user = userService.getUserById(question.getCreator().longValue());
@@ -79,6 +85,7 @@ public class QuestionService {
         QuestionExample questionExample = new QuestionExample();
         questionExample.createCriteria()
                 .andCreatorEqualTo(id);
+        questionExample.setOrderByClause("gmt_create desc");
         if (pageNum == null || pageNum < 1) {
             pageNum = 1;
         } else if (pageNum > this.getPages(pageSize,questionExample)) {
@@ -87,6 +94,7 @@ public class QuestionService {
 
         PageHelper.startPage(pageNum, pageSize);
         List<Question> questions = questionMapper.selectByExample(questionExample);
+
         PageInfo<Question> pageInfo = new PageInfo<>(questions, 7);
 
         pageInfo.setNavigateLastPage(this.getPages(pageSize, questionExample));
@@ -150,4 +158,25 @@ public class QuestionService {
         questionExtMapper.incView(question);
     }
 
+    /**
+     * 根据问题标签查找相关问题
+     */
+    public List<QuestionDTO> selectRelated(QuestionDTO queryDTO) {
+        if (StringUtils.isBlank(queryDTO.getTag())) {
+            return new ArrayList<>();
+        }
+        String regexpTag = queryDTO.getTag().replace(',', '|');
+        regexpTag =  regexpTag.replace('，', '|');
+        Question question = new Question();
+        question.setId(queryDTO.getId());
+        question.setTag(regexpTag);
+
+        List<Question> questions = questionExtMapper.selectRelated(question);
+        List<QuestionDTO> questionDTOS = questions.stream().map(q -> {
+            QuestionDTO questionDTO = new QuestionDTO();
+            BeanUtils.copyProperties(q, questionDTO);
+            return questionDTO;
+        }).collect(Collectors.toList());
+        return questionDTOS;
+    }
 }

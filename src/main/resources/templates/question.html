@@ -32,7 +32,6 @@
 
                 <!--内容-->
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="question-view">
-<!--                    <textarea class="col-lg-9 col-md-12 col-sm-12 col-xs-12" readonly th:text="${question.description}"></textarea>-->
                     <div th:text="${question.description}"></div>
                 </div>
 
@@ -67,13 +66,13 @@
                 </div>-->
 
                 <!--标签-->
-<!--                <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <span class="question-tag" th:each="tag : ${question.tag.split(',')}">
                         <a th:href="@{/(page=1,tag=${tag})}"
                            th:text="${tag}" class="community-tag"></a>
                     </span>
-                </div>-->
+                </div>
 
                 <!--编辑-->
                 <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -160,7 +159,7 @@
         </div>
 
         <!--右边信息块-->
-        <!--<div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <h4>发起人</h4>
                 <div class="media">
@@ -177,9 +176,9 @@
                     </div>
                 </div>
             </div>
-            <div th:insert="~{notice :: notice}"></div>
-            <div th:insert="~{side :: side}"></div>
-            &lt;!&ndash;相关问题&ndash;&gt;
+<!--            <div th:insert="~{notice :: notice}"></div>-->
+<!--            <div th:insert="~{side :: side}"></div>-->
+            <!--相关问题-->
             <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <h4>相关问题</h4>
@@ -189,7 +188,7 @@
                     </li>
                 </ul>
             </div>
-        </div>-->
+        </div>
     </div>
 </div>
 <div th:insert="~{footer :: foot}"></div>
