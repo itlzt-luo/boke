@@ -166,7 +166,6 @@ public class QuestionService {
             return new ArrayList<>();
         }
         String regexpTag = queryDTO.getTag().replace(',', '|');
-        regexpTag =  regexpTag.replace('，', '|');
         Question question = new Question();
         question.setId(queryDTO.getId());
         question.setTag(regexpTag);
