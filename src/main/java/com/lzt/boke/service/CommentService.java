@@ -2,6 +2,8 @@ package com.lzt.boke.service;
 
 import com.lzt.boke.dto.CommentDTO;
 import com.lzt.boke.enums.CommentTypeEnum;
+import com.lzt.boke.enums.NotificationStatusEnum;
+import com.lzt.boke.enums.NotificationTypeEnum;
 import com.lzt.boke.exception.CustomizeErrorCode;
 import com.lzt.boke.exception.CustomizeException;
 import com.lzt.boke.mapper.*;
@@ -34,6 +36,9 @@ public class CommentService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private NotificationMapper notificationMapper;
 
     /**
      * 插入评论
@@ -72,7 +77,7 @@ public class CommentService {
             commentExtMapper.incCommentCount(parentComment);
 
             // 创建通知
-            //createNotify(comment, dbComment.getCommentator(), commentator.getName(), question.getTitle(), NotificationTypeEnum.REPLY_COMMENT, question.getId());
+            createNotify(comment, dbComment.getCommentator(), commentator.getName(), question.getTitle(), NotificationTypeEnum.REPLY_COMMENT, question.getId());
         } else {
             // 回复问题
             Question question = questionMapper.selectByPrimaryKey(comment.getParentId());
@@ -85,12 +90,12 @@ public class CommentService {
             questionExtMapper.incCommentCount(question);
 
             // 创建通知
-            // createNotify(comment, question.getCreator(), commentator.getName(), question.getTitle(), NotificationTypeEnum.REPLY_QUESTION, question.getId());
+             createNotify(comment, question.getCreator(), commentator.getName(), question.getTitle(), NotificationTypeEnum.REPLY_QUESTION, question.getId());
         }
     }
 
 
-   /* private void createNotify(Comment comment, Long receiver, String notifierName, String outerTitle, NotificationTypeEnum notificationType, Long outerId) {
+    private void createNotify(Comment comment, Long receiver, String notifierName, String outerTitle, NotificationTypeEnum notificationType, Long outerId) {
         if (receiver == comment.getCommentator()) {
             return;
         }
@@ -104,7 +109,7 @@ public class CommentService {
         notification.setNotifierName(notifierName);
         notification.setOuterTitle(outerTitle);
         notificationMapper.insert(notification);
-    }*/
+    }
 
     /**
      * 获取二级评论

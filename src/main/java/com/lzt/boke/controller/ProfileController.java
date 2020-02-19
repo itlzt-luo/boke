@@ -21,7 +21,7 @@ public class ProfileController {
     private QuestionService questionService;
 
     @GetMapping("/profile/{action}")
-    public String progile(HttpServletRequest request,
+    public String profile(HttpServletRequest request,
                           @PathVariable(name = "action") String action,
                           @RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
                           @RequestParam(name = "pageSize", defaultValue = "5") Integer pageSize,
