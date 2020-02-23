@@ -7,13 +7,14 @@ import okhttp3.*;
 import org.springframework.stereotype.Component;
 import lombok.extern.slf4j.Slf4j;
 import java.io.IOException;
+import java.util.Locale;
 
 /**
  * Github第三方支持
  * 使用okhttp模拟post请求
  */
 @Component
-//@Slf4j
+@Slf4j
 public class GithubProvider {
     public String getAccessToken(AccessTokenDTO accessTokenDTO) {
         MediaType mediaType = MediaType.get("application/json; charset=utf-8");
@@ -46,12 +47,14 @@ public class GithubProvider {
                 .url("https://api.github.com/user?access_token=" + accessToken)
                 .build();
         try {
-            Response response = client.newCall(request).execute();
+            Call call = client.newCall(request);
+            Response response = call.execute();
+            //Response response = client.newCall(request).execute();
             String string = response.body().string();
             GithubUser githubUser = JSON.parseObject(string, GithubUser.class);
             return githubUser;
         } catch (Exception e) {
-            //log.error("getUser error,{}", accessToken, e);
+            log.error("getUser error,{}", accessToken, e);
         }
         return null;
     }

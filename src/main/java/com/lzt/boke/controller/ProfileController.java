@@ -1,9 +1,11 @@
 package com.lzt.boke.controller;
 
+import com.lzt.boke.dto.NotificationDTO;
 import com.lzt.boke.dto.PageInfoDTO;
 import com.lzt.boke.dto.QuestionPageInfoDTO;
 import com.lzt.boke.model.Question;
 import com.lzt.boke.model.User;
+import com.lzt.boke.service.NotificationService;
 import com.lzt.boke.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +22,9 @@ public class ProfileController {
     @Autowired
     private QuestionService questionService;
 
+    @Autowired
+    private NotificationService notificationService;
+
     @GetMapping("/profile/{action}")
     public String profile(HttpServletRequest request,
                           @PathVariable(name = "action") String action,
@@ -34,7 +39,12 @@ public class ProfileController {
             model.addAttribute("section", "questions");
             model.addAttribute("sectionName", "我的提问");
             PageInfoDTO<Question> questionPageInfoDTO = questionService.list(user.getId(), pageNum, pageSize);
-            model.addAttribute("questionPageInfoDTO", questionPageInfoDTO);
+            model.addAttribute("pagination", questionPageInfoDTO);
+        } else if ("replies".equals(action)) {
+            PageInfoDTO<NotificationDTO> paginationDTO = notificationService.list(user.getId(), pageNum, pageSize);
+            model.addAttribute("section", "replies");
+            model.addAttribute("pagination", paginationDTO);
+            model.addAttribute("sectionName", "最新回复");
         }
 
         return "profile";

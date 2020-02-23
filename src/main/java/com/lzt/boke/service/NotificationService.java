@@ -12,6 +12,7 @@ import com.lzt.boke.mapper.NotificationMapper;
 import com.lzt.boke.model.Notification;
 import com.lzt.boke.model.NotificationExample;
 import com.lzt.boke.model.User;
+import com.sun.org.apache.bcel.internal.generic.NEW;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,8 +30,7 @@ public class NotificationService {
         PageInfoDTO<NotificationDTO> notificationDTOPageInfo = new PageInfoDTO<>();
         NotificationExample notificationExample = new NotificationExample();
         notificationExample.createCriteria()
-                .andGmtCreateEqualTo(userId);
-
+                .andReceiverEqualTo(userId);
         if (pageNum == null || pageNum < 1) {
             pageNum = 1;
         } else if (pageNum > this.getPages(pageSize, notificationExample)) {
@@ -38,16 +38,21 @@ public class NotificationService {
         }
 
         //使用PageHelper进行分页查询
-        notificationExample.setOrderByClause("gmt_creat desc");
+        notificationExample.setOrderByClause("gmt_create desc");
         PageHelper.startPage(pageNum, pageSize);
         List<Notification> notifications = notificationMapper.selectByExample(notificationExample);
+
+        PageInfo<Notification> pageInfo = new PageInfo<>(notifications, 7);
+        pageInfo.setNavigateLastPage(this.getPages(pageSize, notificationExample));
+        pageInfo.setNavigateFirstPage(1);
+        notificationDTOPageInfo.setPageInfo(pageInfo);
 
         if (notifications.size() == 0) {
             return notificationDTOPageInfo;
         }
 
-        List<NotificationDTO> notificationDTOS = new ArrayList<>();
 
+        List<NotificationDTO> notificationDTOS = new ArrayList<>();
         for (Notification notification : notifications) {
             NotificationDTO notificationDTO = new NotificationDTO();
             BeanUtils.copyProperties(notification, notificationDTO);
@@ -72,7 +77,7 @@ public class NotificationService {
     public Long unreadCount(Long userId) {
         NotificationExample notificationExample = new NotificationExample();
         notificationExample.createCriteria()
-                .andGmtCreateEqualTo(userId)
+                .andReceiverEqualTo(userId)
                 .andStatusEqualTo(NotificationStatusEnum.UNREAD.getStatus());
         return notificationMapper.countByExample(notificationExample);
     }

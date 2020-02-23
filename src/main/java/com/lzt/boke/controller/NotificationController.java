@@ -2,16 +2,16 @@ package com.lzt.boke.controller;
 
 import com.lzt.boke.dto.NotificationDTO;
 import com.lzt.boke.enums.NotificationTypeEnum;
-import com.lzt.boke.model.Notification;
 import com.lzt.boke.model.User;
 import com.lzt.boke.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
+@Controller
 public class NotificationController {
 
     @Autowired
