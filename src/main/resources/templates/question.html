@@ -32,17 +32,14 @@
 
                 <!--内容-->
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="question-view">
-                    <div th:text="${question.description}"></div>
+                    <textarea style="display:none;" th:text="${question.description}"></textarea>
                 </div>
-
-
-
-
-               <!-- <script type="text/javascript">
+                <script type="text/javascript">
                     $(function () {
                         editormd.markdownToHTML("question-view", {});
                     });
-                </script>-->
+                </script>
+
 
               <!--  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"
                      th:if="${!#lists.isEmpty(#httpServletRequest.getServletContext().getAttribute('FOOTER'))}"

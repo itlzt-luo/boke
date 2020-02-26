@@ -46,6 +46,7 @@ public class PublishController {
             @RequestParam(value = "title", required = false) String title,
             @RequestParam(value = "description", required = false) String description,
             @RequestParam(value = "tag", required = false) String tag,
+            @RequestParam(value = "id", required = false) Long id,
             HttpServletRequest request,
             Model model) {
         model.addAttribute("title", title);
@@ -73,14 +74,12 @@ public class PublishController {
         }
 
         Question question = new Question();
-        question.setCreator(user.getId());
-        question.setDescription(description);
-        question.setGmtCreate(System.currentTimeMillis());
-        question.setGmtModified(System.currentTimeMillis());
         question.setTitle(title);
+        question.setDescription(description);
         question.setTag(tag);
-
-        questionService.insert(question);
+        question.setCreator(user.getId());
+        question.setId(id);
+        questionService.createOrUpdate(question);
         return "redirect:/";
     }
 }
