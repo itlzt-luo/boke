@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import lombok.extern.slf4j.Slf4j;
 import java.io.IOException;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Github第三方支持
@@ -16,6 +17,7 @@ import java.util.Locale;
 @Component
 @Slf4j
 public class GithubProvider {
+
     public String getAccessToken(AccessTokenDTO accessTokenDTO) {
         MediaType mediaType = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
@@ -47,9 +49,7 @@ public class GithubProvider {
                 .url("https://api.github.com/user?access_token=" + accessToken)
                 .build();
         try {
-            Call call = client.newCall(request);
-            Response response = call.execute();
-            //Response response = client.newCall(request).execute();
+            Response response = client.newCall(request).execute();
             String string = response.body().string();
             GithubUser githubUser = JSON.parseObject(string, GithubUser.class);
             return githubUser;

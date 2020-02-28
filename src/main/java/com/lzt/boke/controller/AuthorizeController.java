@@ -63,6 +63,7 @@ public class AuthorizeController {
             user.setGmtModified(System.currentTimeMillis());
             user.setAccountId(String.valueOf(githubUser.getId()));
             user.setAvatarUrl(githubUser.getAvatarUrl());
+            user.setBio(githubUser.getBio());
             userService.createOrUpdate(user);
             session.setAttribute("user", user);
             Cookie cookie = new Cookie("token", user.getToken());

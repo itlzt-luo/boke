@@ -6,8 +6,10 @@ import com.qcloud.cos.COSClient;
 import com.qcloud.cos.ClientConfig;
 import com.qcloud.cos.auth.BasicCOSCredentials;
 import com.qcloud.cos.auth.COSCredentials;
+import com.qcloud.cos.auth.COSSigner;
 import com.qcloud.cos.exception.CosClientException;
 import com.qcloud.cos.exception.CosServiceException;
+import com.qcloud.cos.http.HttpMethodName;
 import com.qcloud.cos.model.ObjectMetadata;
 import com.qcloud.cos.model.PutObjectRequest;
 import com.qcloud.cos.model.PutObjectResult;
@@ -16,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import java.io.InputStream;
+import java.util.Date;
 import java.util.UUID;
 
 @Service
@@ -57,16 +60,17 @@ public class QCloudProvider {
         String bucketName = this.bucketName;
         // 指定要上传到 COS 上对象键
         String key = "/images/"+ generatedFileName;
-        ObjectMetadata objectMetadata = new ObjectMetadata();
-        objectMetadata.setContentLength(size);//文件的大小
-        objectMetadata.setContentType(contentType);//文件的类型
 
         String url = null;
         try {
 
-            PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, key, fileStream, objectMetadata);
+            PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, key, fileStream, new ObjectMetadata());
             PutObjectResult putObjectResult = cosClient.putObject(putObjectRequest);
-            url = this.path + putObjectRequest.getKey();
+            COSSigner signer = new COSSigner();
+            // 设置过期时间为10年
+            Date expiredTime = new Date(System.currentTimeMillis() + 10 * 365 * 24 * 3600L * 1000L);
+            // 要签名的 key, 生成的签名只能用于对应此 key 的下载
+            url = this.path + putObjectRequest.getKey()+ "?" + signer.buildAuthorizationStr(HttpMethodName.GET, key, cred, expiredTime);
         } catch(CosServiceException e){
             log.error("upload error ,{}",fileName,e);
             throw new CustomizeException(CustomizeErrorCode.FILE_UPLOAD_FAIL);
