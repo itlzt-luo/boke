@@ -1,7 +1,7 @@
 package com.lzt.boke.mapper;
 
 
-import com.lzt.boke.dto.QuestionDTO;
+import com.lzt.boke.dto.QuestionQueryDTO;
 import com.lzt.boke.model.Question;
 import org.springframework.stereotype.Repository;
 
@@ -15,7 +15,7 @@ public interface QuestionExtMapper {
 
     List<Question> selectRelated(Question question);
 
-    Integer countBySearch(QuestionDTO questionDTO);
+    Integer countBySearch(QuestionQueryDTO questionQueryDTO);
 
-    List<Question> selectBySearch(QuestionDTO questionDTO);
+    List<Question> selectBySearch(QuestionQueryDTO questionQueryDTO);
 }

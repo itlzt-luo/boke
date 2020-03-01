@@ -31,6 +31,8 @@ public class UserService {
             updateUser.setAvatarUrl(user.getAvatarUrl());
             updateUser.setName(user.getName());
             updateUser.setToken(user.getToken());
+            updateUser.setBio(user.getBio());
+            updateUser.setName(user.getName());
             UserExample example = new UserExample();
             example.createCriteria()
                     .andIdEqualTo(dbuser.getId());

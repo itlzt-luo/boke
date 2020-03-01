@@ -98,12 +98,12 @@
             <artifactId>cos_api</artifactId>
             <version>5.6.15</version>
         </dependency>
-        <dependency>
+<!--        <dependency>
             <groupId>life.majiang.community</groupId>
             <artifactId>community</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
-        </dependency>
+        </dependency>-->
     </dependencies>
     <build>
         <plugins>

@@ -43,31 +43,32 @@
             <nav aria-label="Page navigation">
                 <ul class="pagination">
                     <li th:if="${!questionPageInfoDTO.pageInfo.isFirstPage}">
-                        <a th:href="@{'/?pageNum='+ ${questionPageInfoDTO.pageInfo.navigateFirstPage}}" aria-label="Previous">
+                        <a th:href="@{/(pageNum=${questionPageInfoDTO.pageInfo.navigateFirstPage},search=${search})}" aria-label="Previous">
                             <span aria-hidden="true"><<</span>
                         </a>
                     </li>
 
                     <li th:if="${questionPageInfoDTO.pageInfo.hasPreviousPage}">
-                        <a th:href="@{'/?pageNum='+ ${questionPageInfoDTO.pageInfo.prePage}}" aria-label="Previous">
+                        <a th:href="@{/(pageNum=${questionPageInfoDTO.pageInfo.prePage},search=${search})}" aria-label="Previous">
                             <span aria-hidden="true"><</span>
                         </a>
                     </li>
 
                     <li th:each="page : ${questionPageInfoDTO.pageInfo.navigatepageNums}"
                         th:class="${page == questionPageInfoDTO.pageInfo.pageNum}? 'active'">
-                        <a th:href="@{'/?pageNum='+ ${page}}">
+                        <a th:href="@{/(pageNum=${page},search=${search})}">
                             <span  th:text="${page}"></span>
                         </a>
                     </li>
                     <li th:if="${questionPageInfoDTO.pageInfo.hasNextPage}">
-                        <a th:href="@{'/?pageNum='+ ${questionPageInfoDTO.pageInfo.nextPage}}" aria-label="Next">
+                        <a th:href="@{/(pageNum=${questionPageInfoDTO.pageInfo.nextPage},search=${search})}"
+                           aria-label="Next">
                             <span aria-hidden="true"> > </span>
 
                         </a>
                     </li>
                     <li th:if="${!questionPageInfoDTO.pageInfo.isLastPage}">
-                        <a th:href="@{'/?pageNum='+ ${questionPageInfoDTO.pageInfo.navigateLastPage}}" aria-label="Next">
+                        <a th:href="@{/(pageNum=${questionPageInfoDTO.pageInfo.navigateLastPage},search=${search})}" aria-label="Next">
                             <span aria-hidden="true"> >> </span>
                         </a>
                     </li>

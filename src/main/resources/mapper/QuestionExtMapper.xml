@@ -26,7 +26,7 @@
     COMMENT_COUNT = COMMENT_COUNT + #{commentCount,jdbcType=INTEGER}
     where id = #{id}
     </update>
-<!--以正则的方式-->
+    <!--以正则的方式-->
     <select id="selectRelated" parameterType="com.lzt.boke.model.Question" resultMap="BaseResultMap">
         select * from QUESTION
         <where>
@@ -40,7 +40,7 @@
         order by gmt_create desc limit 20
     </select>
 
-    <select id="countBySearch" parameterType="com.lzt.boke.dto.QuestionDTO"
+    <!--<select id="countBySearch" parameterType="com.lzt.boke.dto.QuestionDTO"
             resultType="java.lang.Integer">
         select count(*) from QUESTION
         <where>
@@ -57,9 +57,30 @@
                 and gmt_create > #{time}
             </if>
         </where>
+    </select>-->
+    <select id="countBySearch" parameterType="com.lzt.boke.dto.QuestionQueryDTO"
+        resultType="java.lang.Integer">
+        select count(*) from QUESTION
+        <where>
+            <if test="search != null and search != null">
+                and title regexp #{search}
+            </if>
+        </where>
     </select>
 
-    <select id="selectBySearch" parameterType="com.lzt.boke.dto.QuestionDTO"
+
+    <select id="selectBySearch" parameterType="com.lzt.boke.dto.QuestionQueryDTO"
+            resultMap="BaseResultMap">
+        select * from QUESTION
+        <where>
+            <if test="search != null and search != ''">
+                and title regexp #{search}
+            </if>
+        </where>
+        order by gmt_create desc
+    </select>
+
+    <!--<select id="selectBySearch" parameterType="com.lzt.boke.dto.QuestionDTO"
             resultMap="BaseResultMap">
         select * from QUESTION
         <where>
@@ -89,5 +110,5 @@
             order by comment_count desc
         </if>
         limit #{page},#{size}
-    </select>
+    </select>-->
 </mapper>

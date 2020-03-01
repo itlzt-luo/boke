@@ -5,14 +5,12 @@
 
 // $("#commentButton").onclick(post);
 function post() {
-    alert("发起回复");
     var questionId = $("#question_id").val();
     var content = $("#comment_content").val();
     this.comment2target(questionId, 1, content);
 }
 
 function comment2target(targetId, type, content) {
-    alert("回复");
     if (!content) {
         alert("不能回复空内容");
         return;

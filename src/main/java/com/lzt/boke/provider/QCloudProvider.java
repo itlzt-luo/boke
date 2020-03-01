@@ -21,6 +21,9 @@ import java.io.InputStream;
 import java.util.Date;
 import java.util.UUID;
 
+/**
+ * 图片上传到腾讯云存储对象
+ */
 @Service
 @Slf4j
 public class QCloudProvider {

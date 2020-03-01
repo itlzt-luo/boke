@@ -5,6 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lzt.boke.dto.PageInfoDTO;
 import com.lzt.boke.dto.QuestionDTO;
+import com.lzt.boke.dto.QuestionQueryDTO;
 import com.lzt.boke.exception.CustomizeErrorCode;
 import com.lzt.boke.exception.CustomizeException;
 import com.lzt.boke.mapper.QuestionExtMapper;
@@ -12,13 +13,13 @@ import com.lzt.boke.mapper.QuestionMapper;
 import com.lzt.boke.model.Question;
 import com.lzt.boke.model.QuestionExample;
 import com.lzt.boke.model.User;
-import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,22 +41,36 @@ public class QuestionService {
      * @param pageSize
      * @return
      */
-    public PageInfoDTO<QuestionDTO> list(Integer pageNum, Integer pageSize) {
+    public PageInfoDTO<QuestionDTO> list( String search, Integer pageNum, Integer pageSize) {
+
+        if (!StringUtils.isBlank(search)) {
+            String[] tags = StringUtils.split(search, " ");
+            search = Arrays.stream(tags).collect(Collectors.joining("|"));
+        }
+
+        QuestionQueryDTO questionQueryDTO = new QuestionQueryDTO();
+        questionQueryDTO.setSearch(search);
+
+        int totalRecords = (int) questionExtMapper.countBySearch(questionQueryDTO);
+        int totalPages = totalRecords % pageSize == 0 ? totalRecords / pageSize : (totalRecords / pageSize + 1);
 
         if (pageNum == null || pageNum < 1) {
             pageNum = 1;
-        } else if (pageNum > this.getPages(pageSize, new QuestionExample())) {
-            pageNum = this.getPages(pageSize, new QuestionExample());
+        } else if (pageNum > totalPages) {
+            pageNum = totalPages;
         }
 
-        List<QuestionDTO> questionDTOList = new ArrayList<>();
+        questionQueryDTO.setPageNum(pageNum);
+        questionQueryDTO.setPageSize(pageSize);
 
+        List<QuestionDTO> questionDTOList = new ArrayList<>();
         PageHelper.startPage(pageNum, pageSize);
-        QuestionExample questionExample = new QuestionExample();
-        questionExample.setOrderByClause("gmt_create desc");
-        List<Question> questions = questionMapper.selectByExample(questionExample);
+        List<Question> questions = questionExtMapper.selectBySearch(questionQueryDTO);
 
         PageInfo<Question> pageInfo = new PageInfo<>(questions, 7);
+        pageInfo.setNavigateLastPage(totalPages);
+        pageInfo.setNavigateFirstPage(1);
+
         for (Question question : questions) {
             User user = userService.getUserById(question.getCreator().longValue());
             QuestionDTO questionDTO = new QuestionDTO();
@@ -64,14 +79,9 @@ public class QuestionService {
             questionDTOList.add(questionDTO);
         }
 
-        pageInfo.setNavigateLastPage(this.getPages(pageSize, new QuestionExample()));
-        pageInfo.setNavigateFirstPage(1);
-
-
         PageInfoDTO<QuestionDTO> questionPageInfoDTO = new PageInfoDTO<>();
         questionPageInfoDTO.setPageInfo(pageInfo);
         questionPageInfoDTO.setDataCollection(questionDTOList);
-
         return questionPageInfoDTO;
     }
 
