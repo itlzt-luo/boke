@@ -21,7 +21,6 @@ java -jar target/community-0.0.1-SNAPSHOT.jar
 http://localhost:8887
 ```
 
-
 ## 资料
 [Spring 文档](https://spring.io/guides)    
 [Spring Web](https://spring.io/guides/gs/serving-web-content/)   
@@ -73,3 +72,49 @@ mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate
 - 2019-8-18 修复搜索输入 ? 号出现异常问题
 - 2019-8-22 修复图片大小限制和提问内容为空问题
 - 2019-9-1 添加动态导航栏
+# 服务器部署
+## 环境配置 
+- Git
+- JDK
+- Maven
+- Mysql
+## 步骤
+- yum update
+- yum install git
+- yum install maven
+- mkdir App
+- cd App
+- git clone http....
+- jdk
+    ```
+    安装之前先检查一下系统有没有自带open-jdk
+    命令：
+    rpm -qa |grep java
+    rpm -qa |grep jdk
+    rpm -qa |grep gcj
+    如果没有输入信息表示没有安装
+    如果安装可以使用rpm -qa | grep java | xargs rpm -e --nodeps 批量卸载所有带有Java的文件  这句命令的关键字是java
+    首先检索包含java的列表
+    yum list java*
+    检索1.8的列表
+    yum list java-1.8*   
+    安装1.8.0的所有文件
+    yum install java-1.8.0-openjdk* -y
+    使用命令检查是否安装成功
+    java -version
+    ```
+- 修改配置文件
+    ```sh
+    覆盖原有配置文件
+    cp boke/src/main/resources/application.properties boke/src/main/resources/application-production.properties
+    more 查看
+    vim 修改 
+    ```
+- mvn compile package 
+- java -jar -Dspring.profiles.active=production target/boke-0.0.1-SNAPSHOT.jar
+- ps -aux | grep java
+
+- git pull
+
+
+
