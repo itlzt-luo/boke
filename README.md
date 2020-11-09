@@ -1,12 +1,18 @@
-## 码匠社区
+## 博科社区
+
+本项目为学习Springboot框架后练习项目：
+[演示地址](http://47.96.13.64/)
+[Github地址](https://github.com/itlzt-luo/boke)
+项目原作者：「码匠笔记」
 
 ## 快速运行
+
 1. 安装必备工具  
 JDK，Maven
 2. 克隆代码到本地  
 3. 运行命令创建数据库脚本
 ```sh
-mvn flyway:migrate
+mvn clean compile flyway:migrate
 ```
 4. 运行打包命令
 ```sh
@@ -22,6 +28,7 @@ http://localhost:8887
 ```
 
 ## 资料
+
 [Spring 文档](https://spring.io/guides)    
 [Spring Web](https://spring.io/guides/gs/serving-web-content/)   
 [es](https://elasticsearch.cn/explore)    
@@ -38,6 +45,7 @@ http://localhost:8887
 [Count(*) VS Count(1)](https://mp.weixin.qq.com/s/Rwpke4BHu7Fz7KOpE2d3Lw)  
 
 ## 工具
+
 [Git](https://git-scm.com/download)   
 [Visual Paradigm](https://www.visual-paradigm.com)    
 [Flyway](https://flywaydb.org/getstarted/firststeps/maven)  

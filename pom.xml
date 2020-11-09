@@ -74,6 +74,12 @@
             <artifactId>h2</artifactId>
             <version>1.4.199</version>
         </dependency>
+        <!--mysql-->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.45</version>
+        </dependency>
         <!--pagehelper-->
         <dependency>
             <groupId>com.github.pagehelper</groupId>
@@ -98,17 +104,11 @@
             <artifactId>cos_api</artifactId>
             <version>5.6.15</version>
         </dependency>
-<!--        <dependency>
-            <groupId>life.majiang.community</groupId>
-            <artifactId>community</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>-->
     </dependencies>
     <build>
         <plugins>
             <!--flywaydb+H2-->
-            <plugin>
+            <!--<plugin>
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
                 <version>6.1.1</version>
@@ -124,7 +124,31 @@
                         <version>1.4.199</version>
                     </dependency>
                 </dependencies>
+            </plugin>-->
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>5.2.4</version>
+                <configuration>
+                    <url>jdbc:mysql://47.96.13.64:3306/boke</url>
+                    <user>boke</user>
+                    <password>******</password>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>mysql</groupId>
+                        <artifactId>mysql-connector-java</artifactId>
+                        <version>5.1.45</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.h2database</groupId>
+                        <artifactId>h2</artifactId>
+                        <version>1.4.199</version>
+                    </dependency>
+                </dependencies>
             </plugin>
+
+
             <!--generator+H2-->
             <plugin>
                 <groupId>org.mybatis.generator</groupId>
